@@ -10,5 +10,4 @@ public class ApexIntegrationApplication {
     public static void main(String[] args) {
         SpringApplication.run(ApexIntegrationApplication.class, args);
     }
-
 }
