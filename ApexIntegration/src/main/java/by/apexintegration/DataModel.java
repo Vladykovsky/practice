@@ -1,15 +1,14 @@
 package by.apexintegration;
 
-
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @Data
 @RequiredArgsConstructor
-public class Point {
+public class DataModel {
 
-    private  double x;
-
-    private  double y;
+    private List<Point> points;
 
 }
