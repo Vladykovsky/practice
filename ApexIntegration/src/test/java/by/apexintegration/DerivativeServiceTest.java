@@ -19,14 +19,9 @@ public class DerivativeServiceTest {
         final double END = 4;
         final double STEP = 0.5;
 
-        List<Double> xArguments = new ArrayList<>();
+        List<Double[]> arguments = new ArrayList<>();
         for(double x = START; x <= END; x += STEP) {
-            xArguments.add(x);
-        }
-
-        List<Double> yArguments = new ArrayList<>();
-        for(int i = 0; i < xArguments.size() - 1; i++ ) {
-            yArguments.add(f(xArguments.get(i)));
+            arguments.add(new Double[] {x, f(x)});
         }
     }
 
