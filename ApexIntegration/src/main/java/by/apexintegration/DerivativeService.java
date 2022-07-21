@@ -15,9 +15,9 @@ public class DerivativeService implements IDerivativeService {
     @Override
     public List<Double> derivative(List<Point> points) throws JsonProcessingException {
         List<Double> yDerivative = this.getFirstDerivative(points);
-        List<Double> yyDerivative = getSecondDerivative(yDerivative);
         List<Double> yDerivativeAnalytic = getFirstDerivativeAnalytics(points);
-        List<Double> yyDerivativeAnalytic = getSecondDerivativeAnalytics(yDerivativeAnalytic);
+        List<Double> yyDerivative = getSecondDerivative(points);
+        List<Double> yyDerivativeAnalytic = getSecondDerivativeAnalytics(points);
         List<Double> difference = getDifference(yDerivative, yDerivativeAnalytic);
         return difference;
         List<Double> secondDifference = getSecondDifference(yyDerivative, yyDerivativeAnalytic);
@@ -33,11 +33,11 @@ public class DerivativeService implements IDerivativeService {
         return yDerivative;
     }
 
-    private List<Double> getSecondDerivative(List<Double> yDerivative) {
+    private List<Double> getSecondDerivative(List<Point> points) {
         List<Double> yyDerivative = new ArrayList<>();
-        for (int i = 0; i < yDerivative.size() - 1; i++) {
-            yyDerivative.add((yDerivative.get(i+1) - yDerivative.get(i)) /
-                    (yDerivative.get(i+1) - yDerivative.get(i)));
+        for (int i = 0; i < points.size() - 1; i++) {
+            yyDerivative.add((points.get(i+1).getY() - points.get(i).getY()) /
+                    (points.get(i+1).getX() - points.get(i).getX()));
         }
         return yyDerivative;
     }
@@ -50,10 +50,10 @@ public class DerivativeService implements IDerivativeService {
         return yDerivativeAnalytic;
     }
 
-    private List<Double> getSecondDerivativeAnalytics(List<Double> yDerivativeAnalytic) {
+    private List<Double> getSecondDerivativeAnalytics(List<Point> points) {
         List<Double> yyDerivativeAnalytic = new ArrayList<>();
-        for(int i = 0; i < yDerivativeAnalytic.size() - 1; i++) {
-            yyDerivativeAnalytic.add(sDerivative(yDerivativeAnalytic.get(i)));
+        for(int i = 0; i < points.size() - 1; i++) {
+            yyDerivativeAnalytic.add(sDerivative(points.get(i).getX()));
         }
         return yyDerivativeAnalytic;
     }
@@ -85,7 +85,8 @@ public class DerivativeService implements IDerivativeService {
         return points;
     }
 
-    //-----------Analytic derivative of testing function--------------
+    //-----------Testing functions--------------
+
     private double fDerivative(double x) { return 3*x*x;}
 
     private double f(double x) {
