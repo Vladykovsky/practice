@@ -1,17 +1,11 @@
 package by.apexintegration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.stereotype.Service;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -20,11 +14,14 @@ public class DerivativeService implements IDerivativeService {
 
     @Override
     public List<Double> derivative(List<Point> points) throws JsonProcessingException {
-        // значения не null, проверить, если точки придут null
         List<Double> yDerivative = this.getFirstDerivative(points);
+        List<Double> yyDerivative = getSecondDerivative(yDerivative);
         List<Double> yDerivativeAnalytic = getFirstDerivativeAnalytics(points);
+        List<Double> yyDerivativeAnalytic = getSecondDerivativeAnalytics(yDerivativeAnalytic);
         List<Double> difference = getDifference(yDerivative, yDerivativeAnalytic);
         return difference;
+        List<Double> secondDifference = getSecondDifference(yyDerivative, yyDerivativeAnalytic);
+        return secondDifference;
     }
 
     private List<Double> getFirstDerivative(List<Point> points) {
@@ -36,12 +33,29 @@ public class DerivativeService implements IDerivativeService {
         return yDerivative;
     }
 
+    private List<Double> getSecondDerivative(List<Double> yDerivative) {
+        List<Double> yyDerivative = new ArrayList<>();
+        for (int i = 0; i < yDerivative.size() - 1; i++) {
+            yyDerivative.add((yDerivative.get(i+1) - yDerivative.get(i)) /
+                    (yDerivative.get(i+1) - yDerivative.get(i)));
+        }
+        return yyDerivative;
+    }
+
     private List<Double> getFirstDerivativeAnalytics(List<Point> points) {
         List<Double> yDerivativeAnalytic = new ArrayList<>();
         for(int i = 0; i < points.size() - 1; i++) {
             yDerivativeAnalytic.add(fDerivative(points.get(i).getX()));
         }
         return yDerivativeAnalytic;
+    }
+
+    private List<Double> getSecondDerivativeAnalytics(List<Double> yDerivativeAnalytic) {
+        List<Double> yyDerivativeAnalytic = new ArrayList<>();
+        for(int i = 0; i < yDerivativeAnalytic.size() - 1; i++) {
+            yyDerivativeAnalytic.add(sDerivative(yDerivativeAnalytic.get(i)));
+        }
+        return yyDerivativeAnalytic;
     }
 
     private List<Double> getDifference(List<Double> yDerivative, List<Double> yDerivativeAnalytic) {
@@ -52,9 +66,32 @@ public class DerivativeService implements IDerivativeService {
         return difference;
     }
 
-    //-----------Analytic derivative of testing function--------------
-    private double fDerivative(double x) {
-        return 2*x;
+    private List<Double> getSecondDifference(List<Double> yyDerivative, List<Double> yyDerivativeAnalytic) {
+        List<Double> secondDifference = new ArrayList<>();
+        for(int i = 0; i < yyDerivative.size() - 1; i++ ) {
+            secondDifference.add(Math.abs(yyDerivativeAnalytic.get(i) - yyDerivative.get(i)));
+        }
+        return secondDifference;
     }
+
+    public List<Point> generatePoints(double start, double end, double step) {
+        List<Point> points = new ArrayList<Point>();
+        for(double i = start; i <= end; i+= step) {
+            Point p = new Point();
+            p.setX(i);
+            p.setY(f(i));
+            points.add(p);
+        }
+        return points;
+    }
+
+    //-----------Analytic derivative of testing function--------------
+    private double fDerivative(double x) { return 3*x*x;}
+
+    private double f(double x) {
+        return x*x*x;
+    }
+
+    private double sDerivative(double x) { return 6*x; }
 
 }

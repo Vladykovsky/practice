@@ -1,42 +1,30 @@
 package by.apexintegration;
 
-import org.junit.Rule;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@RunWith(SpringRunner.class)
+@SpringBootTest
 public class DerivativeServiceTest {
+    @Autowired
+    private DerivativeService derivativeService;
 
     @Test
-    void derivative() {
-       // List<Double> yDerivativeAnalytic = getFirstDerivativeAnalytics(null);
+    void derivativeTest() throws JsonProcessingException {
+
+        final double STEP = 0.1;
         final double START = -4;
         final double END = 4;
-        final double STEP = 0.5;
+        final double E = 0.001;
 
-        List<Double[]> arguments = new ArrayList<>();
-        for(double x = START; x <= END; x += STEP) {
-            arguments.add(new Double[] {x, f(x)});
-        }
-    }
+        List<Point> points = derivativeService.generatePoints(START, END, STEP);
 
-    private List<Double> getFirstDerivativeAnalytics(List<Point> points) {
-        List<Double> yDerivativeAnalytic = new ArrayList<>();
-        for(int i = 0; i < points.size() - 1; i++) {
-            yDerivativeAnalytic.add(fDerivative(points.get(i).getX()));
-        }
-        return yDerivativeAnalytic;
-    }
-    private double fDerivative(double x) {
-        return 2*x;
-    }
+        Assertions.assertThat(derivativeService.derivative(points)).allMatch(derDiff -> derDiff < STEP + E);
 
-    private double f(double x) {
-        return x*x;
     }
 }
