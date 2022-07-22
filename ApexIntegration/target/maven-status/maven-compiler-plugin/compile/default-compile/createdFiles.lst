@@ -1,5 +1,12 @@
-by\apexintegration\LoginForm.class
-by\apexintegration\ApexIntegrationApplication.class
-by\apexintegration\Response.class
-by\apexintegration\Controller.class
-by\apexintegration\Request.class
+by/apexintegration/model/Point.class
+by/apexintegration/ApexIntegrationApplication.class
+by/apexintegration/controller/IntegratorController.class
+by/apexintegration/model/Signal$SignalBuilder.class
+by/apexintegration/model/Point$PointBuilder.class
+by/apexintegration/model/DerivativeType.class
+by/apexintegration/model/Signal.class
+by/apexintegration/service/DerivativeService.class
+by/apexintegration/exceptions/CalculationException.class
+by/apexintegration/model/DerivativeSignal$DerivativeSignalBuilder.class
+by/apexintegration/model/DerivativeSignal.class
+by/apexintegration/service/IDerivativeService.class

@@ -1,5 +1,9 @@
-C:\Projects\ApexIntegration\src\main\java\by\apexintegration\LoginForm.java
-C:\Projects\ApexIntegration\src\main\java\by\apexintegration\Response.java
-C:\Projects\ApexIntegration\src\main\java\by\apexintegration\ApexIntegrationApplication.java
-C:\Projects\ApexIntegration\src\main\java\by\apexintegration\Request.java
-C:\Projects\ApexIntegration\src\main\java\by\apexintegration\Controller.java
+/home/imax/work_project/practice/ApexIntegration/src/main/java/by/apexintegration/model/DerivativeSignal.java
+/home/imax/work_project/practice/ApexIntegration/src/main/java/by/apexintegration/service/DerivativeService.java
+/home/imax/work_project/practice/ApexIntegration/src/main/java/by/apexintegration/model/Signal.java
+/home/imax/work_project/practice/ApexIntegration/src/main/java/by/apexintegration/exceptions/CalculationException.java
+/home/imax/work_project/practice/ApexIntegration/src/main/java/by/apexintegration/model/DerivativeType.java
+/home/imax/work_project/practice/ApexIntegration/src/main/java/by/apexintegration/controller/IntegratorController.java
+/home/imax/work_project/practice/ApexIntegration/src/main/java/by/apexintegration/service/IDerivativeService.java
+/home/imax/work_project/practice/ApexIntegration/src/main/java/by/apexintegration/ApexIntegrationApplication.java
+/home/imax/work_project/practice/ApexIntegration/src/main/java/by/apexintegration/model/Point.java
