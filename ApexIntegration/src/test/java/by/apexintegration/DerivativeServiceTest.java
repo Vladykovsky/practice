@@ -71,8 +71,6 @@ public class DerivativeServiceTest {
 //        Assertions.assertThat(getDifference(yyDerivative, yyDerivativeAnalytics)).allMatch(derDiff -> derDiff < 6*STEP + E);
     }
 
-
-
     private List<Double> getDifference(DerivativeSignal derivativeSignal, DerivativeSignal derivativeSignalAnalytic) {
         List<Double> difference = new ArrayList<>();
         for(int i = 0; i < derivativeSignal.getPoints().size() - 1; i++ ) {
