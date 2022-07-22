@@ -1,6 +1,7 @@
 package by.apexintegration.controller;
 
 import by.apexintegration.exceptions.CalculationException;
+import by.apexintegration.model.ApexSignal;
 import by.apexintegration.model.DerivativeSignal;
 import by.apexintegration.model.Signal;
 import by.apexintegration.model.Point;
@@ -58,6 +59,17 @@ public class IntegratorController {
         return ResponseEntity.ok(derivativePoints);
     }
 
+    @PostMapping("/derivative/apex/file")
+    public ResponseEntity<ApexSignal> foundApex() throws CalculationException, JsonProcessingException {
+        List<Point> points = this.getInfoFromJSON("array.json");
+        Signal signal = Signal.builder()
+                .name("File signal")
+                .points(points)
+                .build();
+        DerivativeSignal derivativePoints = this.derivativeService.calculatedFirstDerivative(signal);
+        ApexSignal apexPoints = this.derivativeService.foundApex(derivativePoints);
+        return ResponseEntity.ok(apexPoints);
+    }
 
     private List<Point> getInfoFromJSON(String fileName) throws JsonProcessingException {
         List<Point> points = new ArrayList<>();

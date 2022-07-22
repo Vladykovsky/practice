@@ -1,10 +1,7 @@
 package by.apexintegration.service;
 
 import by.apexintegration.exceptions.CalculationException;
-import by.apexintegration.model.DerivativeSignal;
-import by.apexintegration.model.DerivativeType;
-import by.apexintegration.model.Point;
-import by.apexintegration.model.Signal;
+import by.apexintegration.model.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,13 +20,19 @@ public class DerivativeService implements IDerivativeService {
         if (Objects.isNull(signal) || Objects.isNull(signal.getPoints())) {
             throw new CalculationException("Signal data is null");
         }
-        List<Point> yDerivativePoints = calculateSlopes(signal.getPoints());
-        return DerivativeSignal
-                .builder()
-                .name("Derivative 1 of " + signal.getName())
-                .type(DerivativeType.FIRST)
-                .points(yDerivativePoints)
-                .build();
+        try {
+            List<Point> yDerivativePoints = calculateSlopes(signal.getPoints());
+            return DerivativeSignal
+                    .builder()
+                    .name("Derivative 1 of " + signal.getName())
+                    .type(DerivativeType.FIRST)
+                    .points(yDerivativePoints)
+                    .build();
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            throw new CalculationException(ex.getMessage());
+        }
     }
 
     @Override
@@ -38,15 +41,45 @@ public class DerivativeService implements IDerivativeService {
         if (Objects.isNull(firstDerivative) || Objects.isNull(firstDerivative.getPoints())) {
             throw new CalculationException("First derivative data is null");
         }
-        List<Point> yDerivativeSecondPoints = calculateSlopes(firstDerivative.getPoints()); // почему аргумент вызова начальные данные?
-        return DerivativeSignal
-                .builder()
-                .name("Derivative 2 of " + signal.getName())
-                .type(DerivativeType.FIRST)
-                .points(yDerivativeSecondPoints)
-                .build();
+        try {
+            List<Point> yDerivativeSecondPoints = calculateSlopes(firstDerivative.getPoints()); // почему аргумент вызова начальные данные?
+            return DerivativeSignal
+                    .builder()
+                    .name("Derivative 2 of " + signal.getName())
+                    .type(DerivativeType.SECOND)
+                    .points(yDerivativeSecondPoints)
+                    .build();
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            throw new CalculationException(ex.getMessage());
+        }
     }
 
+    @Override
+    public ApexSignal foundApex(DerivativeSignal signal) throws CalculationException {
+        if (Objects.isNull(signal.getPoints())) {
+            throw new CalculationException("Derivative data is null");
+        }
+        try {
+            List<Point> apex = new ArrayList<>();
+            List<Point> derivative = signal.getPoints();
+            for (int i = 1; i < derivative.size() - 1; i++) {
+                if (derivative.get(i - 1).getY() > 0 && derivative.get(i + 1).getY() < 0) {
+                    apex.add(derivative.get(i));
+                }
+            }
+            return ApexSignal
+                    .builder()
+                    .name("Apex of " + signal.getName())
+                    .points(apex)
+                    .build();
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            throw new CalculationException(ex.getMessage());
+        }
+    }
 
     private List<Point> calculateSlopes(List<Point> points) {
         List<Point> slopePoints = new ArrayList<>();
@@ -57,5 +90,4 @@ public class DerivativeService implements IDerivativeService {
         }
         return slopePoints;
     }
-
 }
